@@ -19,6 +19,10 @@ var monsterImg = new Image(); // Initializing background img as a new Image
 monsterImg.src = "lib/imgs/monster2-a.png"; // Sets background img's source to img in files
 var monsterReady = false; // initializes var background ready false
 
+var spaceShotImg = new Image();
+spaceShotImg.src = "lib/imgs/spaceshot.png";
+var spaceShotReady = false;
+
 backgroundImg.onload = function() {
     backgroundReady = true;
 }; // On load, turn these booleans true
@@ -27,6 +31,10 @@ spaceShipImg.onload = function() {
 };
 monsterImg.onload = function() {
     monsterReady = true;
+};
+
+spaceShotImg.onload = function () {
+    spaceShotReady = true;
 };
 
 
@@ -49,10 +57,24 @@ document.addEventListener("keydown", function(e) {
   if (e.keyCode === 38) {  // Prevents default of the Up Arrow Key
     e.preventDefault();
   }
- },  false); // Adds event to dictionary when keydown
+
+  if (e.keyCode === 32) {
+    // if (!shotFired) {
+    //   spaceShots.y = spaceship.y;
+    // }
+    var shot = {x: spaceship.x + 10, y: spaceship.y};
+    spaceShots.push(shot);
+  }
+
+},  false); // Adds event to dictionary when keydown
+
+
+
 document.addEventListener("keyup", function(e) { delete events[e.keyCode]; },  false); //deletes even from dictionary when keyup
 
 var spaceship = {x: 720, y: 600, health: 100};
+var spaceShots = [];
+// var shotFired = false; // Has the bullet been fired?
 
 var render = function() {
     if (backgroundReady === true) {
@@ -71,6 +93,7 @@ var render = function() {
         ctx.drawImage(monsterImg, 200, 200, 75, 75);
 
     }
+
 
     if (37 in events) {  // LEft Arrow Key movement
       spaceship.x = spaceship.x - 5;
@@ -95,14 +118,32 @@ var render = function() {
       spaceship.y = spaceship.y - 5;
     }
 
+    // Loops the spaceship on the sides of the game if they pass the "canvas" length
+
     switch (spaceship.x) {
       case (1370):
         spaceship.x = 0;
         break;
-      case (0):
+      case (-20):
       spaceship.x = canvas.width - 75;
     }
 
+
+    if (spaceShots.length > 0) {
+      var stillGoodShots = [];
+
+      spaceShots.forEach(function (shot){
+        ctx.drawImage(spaceShotImg, shot.x, shot.y, 50, 50);
+        shot.y-= 15;
+
+        if (shot.y > 0) {
+          stillGoodShots.push(shot);
+        }
+      });
+
+
+      spaceShots = stillGoodShots;
+    }
 };
 
 var gameloop = function () {
