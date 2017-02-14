@@ -44,11 +44,12 @@ var spaceShotImg = new Image(); //Initialized space shot and gets it ready for l
 spaceShotImg.src = "lib/imgs/spaceshot.png";
 var spaceShotReady = false;
 
-function Monster(x, y, points, img) { //Monster constructor to create different monster
+function Monster(x, y, points, img, wasHit) { //Monster constructor to create different monster
     this.x = x;
     this.y = y;
     this.points = points;
     this.image = img;
+    this.isDead = false;
 }
 
 var hoard1 = []; // Makes Multiple Monsters type: a (top
@@ -135,22 +136,21 @@ document.addEventListener("keydown", function(e) {
         e.preventDefault();
     }
 
-    if (e.keyCode === 38) { // Prevents default of the Up Arrow Key
+    if (e.keyCode === 32 || e.keyCode === 38 || e.keyCode === 87) {
         e.preventDefault();
-    }
 
-    if (e.keyCode === 32) {
-        // if (!shotFired) {
-        //   spaceShots.y = spaceship.y;
-        // }
+
         var shot = {
-            x: spaceship.x + 10,
-            y: spaceship.y
+            x: spaceship.x + 36,
+            y: spaceship.y,
+            hitTarget: false
         };
         spaceShots.push(shot);
     }
 
+
 }, false); // Adds event to dictionary when keydown
+
 
 
 
@@ -160,22 +160,23 @@ document.addEventListener("keyup", function(e) {
 
 var spaceship = {
     x: 720,
-    y: 600,
+    y: 550,
     health: 100
 };
 var spaceShots = [];
+//Monster Animation ////////
 setInterval(monsterAni, 500);
 
 function monsterAni() {
 
-  hoard1.forEach(function(monster) { // monster type: b
-      if (monster.image === monsterImg1) {
-          monster.image = monsterImg1a;
-      } else {
-          monster.image = monsterImg1;
-      }
+    hoard1.forEach(function(monster) { // monster type: b
+        if (monster.image === monsterImg1) {
+            monster.image = monsterImg1a;
+        } else {
+            monster.image = monsterImg1;
+        }
 
-  });
+    });
 
 
 
@@ -224,6 +225,7 @@ function monsterAni() {
 
 
 var render = function() {
+  checkDeadDudes(); // Check to see if there is any dead des
     if (backgroundReady === true) {
 
         ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
@@ -239,52 +241,63 @@ var render = function() {
     //If all the monsters1 have loaded, draw them on the background;
     if (monster1Ready === true) {
         hoard1.forEach(function(monster) {
-            ctx.drawImage(monster.image, monster.x, monster.y, 50, 50);
+            if (monster.isDead === false) {
+                ctx.drawImage(monster.image, monster.x, monster.y, 40, 40);
+            }
+            if (monster.isDead === true ) {
+
+
+            }
         });
     }
 
     //If all the monsters2 have loaded, draw them on the background;
     if (monster2Ready === true) {
         hoard2.forEach(function(monster) {
-            ctx.drawImage(monster.image, monster.x, monster.y, 50, 50);
+            if (monster.isDead === false) {
+                ctx.drawImage(monster.image, monster.x, monster.y, 40, 40);
+            }
         });
     }
 
     //If all the monsters3 have loaded, draw them on the background;
     if (monster2Ready === true) {
         hoard3.forEach(function(monster) {
-            ctx.drawImage(monster.image, monster.x, monster.y, 50, 50);
+            if (monster.isDead === false) {
+                ctx.drawImage(monster.image, monster.x, monster.y, 40, 40);
+            }
         });
     }
 
     //If all the monsters3 have loaded, draw them on the background;
     if (monster3Ready === true) {
         hoard4.forEach(function(monster) {
-            ctx.drawImage(monster.image, monster.x, monster.y, 50, 50);
+            if (monster.isDead === false) {
+                ctx.drawImage(monster.image, monster.x, monster.y, 40, 40);
+            }
         });
     }
 
     //If all the monsters3 have loaded, draw them on the background;
     if (monster3Ready === true) {
         hoard5.forEach(function(monster) {
-            ctx.drawImage(monster.image, monster.x, monster.y, 50, 50);
+            if (monster.isDead === false) {
+                ctx.drawImage(monster.image, monster.x, monster.y, 40, 40);
+            }
+
+            // if (monster.isDead === true ) {
+            //   monster.image.src = ;
+            // }
+
         });
     }
 
 
-    //If all the monsters1 have loaded, draw them on the background;
-    // if (monster3Ready === true) {
-    //     hoard5.forEach(function(monster){
-    //       ctx.drawImage(monster.image, monster.x, monster.y, 50, 50);
-    //     });
-    // }
-
-
-    if (37 in events) { // LEft Arrow Key movement
+    if (37 in events || 65 in events) { // LEft Arrow Key movement
         spaceship.x = spaceship.x - 5;
     }
 
-    if (39 in events) { // Right Arrow Key Movement
+    if (39 in events || 68 in events ) { // Right Arrow Key Movement
         spaceship.x = spaceship.x + 5;
     }
 
@@ -295,32 +308,70 @@ var render = function() {
         spaceship.x = canvas.width - 75;
     }
 
-    if (40 in events) { // Down Arrow Key movement
-        spaceship.y = spaceship.y + 5;
-    }
-
-    if (38 in events) { // Up Arrow Key movement
-        spaceship.y = spaceship.y - 5;
-    }
-
     // If the shots are within the array and within range, update the original array
     // This allows multiple shots to be fired and exist if theyre within the canvas
     if (spaceShots.length > 0) {
         var stillGoodShots = [];
 
         spaceShots.forEach(function(shot) {
-            ctx.drawImage(spaceShotImg, shot.x, shot.y, 50, 50);
+          if (shot.hitTarget === false) {
+            ctx.drawImage(spaceShotImg, shot.x, shot.y, 2, 8);
             shot.y -= 15;
 
             if (shot.y > 0) {
                 stillGoodShots.push(shot);
             }
+          }
+
         });
 
 
         spaceShots = stillGoodShots;
     }
 };
+
+//detection (wasHit?)
+
+Monster.prototype.wasHit = function() {
+
+    this.isDead = true;
+
+};
+
+var monsterArray = [hoard1, hoard2, hoard3, hoard4, hoard5];
+
+
+function checkDeadDudes() {
+  monsterArray.forEach(function(hoard) {
+      hoard.forEach(function(monster) {
+          spaceShots.forEach(function(shot) {
+              if (monster.isDead === false && (monster.x <= shot.x) && (shot.x <= (monster.x + 50)) && // Hit detection
+              (monster.y <= shot.y) && (shot.y <= (monster.y + 10))) {
+                  monster.wasHit();
+                  shot.hitTarget = true;
+
+              }
+
+          });
+      });
+
+
+  });
+}
+
+function moveHoard() {
+
+  monsterArray.forEach(function(hoard){
+    hoard.forEach(function(monster){
+      monster.x +=20;
+        if (hoard[hoard.length - 1].x > (canvas.width - 50)) {
+          monster.y+=10;
+          monster.x -=20;
+        }
+    });
+  });
+}
+
 
 // Game Loop
 
@@ -330,3 +381,6 @@ var gameloop = function() {
 
 // Interval for the game loop
 setInterval(gameloop, 15);
+
+// Interval for movement
+setInterval(moveHoard, 500);
