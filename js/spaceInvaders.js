@@ -164,8 +164,7 @@ var spaceship = {
     health: 100
 };
 var spaceShots = [];
-//Monster Animation ////////
-setInterval(monsterAni, 500);
+
 
 function monsterAni() {
 
@@ -359,20 +358,56 @@ function checkDeadDudes() {
   });
 }
 
-function moveHoard() {
-
+// MOVES ALL THE MONSTERS
+function moveRight () {
   monsterArray.forEach(function(hoard){
-    hoard.forEach(function(monster){
-      monster.x +=20;
-        if (hoard[hoard.length - 1].x > (canvas.width - 50)) {
-          monster.y+=10;
-          monster.x -=20;
-        }
-    });
-  });
+       hoard.forEach(function(monster){
+       monster.x += 20;
+       });
+     });
+
 }
 
+function moveLeft () {
+  monsterArray.forEach(function(hoard){
+       hoard.forEach(function(monster){
+       monster.x -= 20;
+       });
+     });
 
+}
+
+function moveDown () {
+  monsterArray.forEach(function(hoard){
+       hoard.forEach(function(monster){
+       monster.y += 20;
+       var hasMovedDown = true;
+       });
+     });
+}
+
+var sideDirection = 'right';
+
+// Move Monster
+function moveMonster () {
+  if (sideDirection === 'right' && monsterArray[1][10].x  < (canvas.width - 120)) {
+    moveRight(); //If the edge of the final monster isn't touching the canvas edge
+  }
+  if (sideDirection === 'right' && monsterArray[1][10].x  >= (canvas.width - 120 )) {
+    sideDirection = 'left';
+    moveDown(); //If the edge of the final monster touches the canvas length
+  }
+
+  if (sideDirection === 'left' && monsterArray[1][1].x >= 30) {
+    moveLeft(); //If the left edge of the 1st monster isnt touching canvas length
+  }
+
+  if (sideDirection === 'left' && monsterArray[1][1].x <= 30 ){
+    sideDirection = 'right'; //If the left edge touces the canvas right length
+    moveDown();
+
+  }
+}
 // Game Loop
 
 var gameloop = function() {
@@ -383,4 +418,7 @@ var gameloop = function() {
 setInterval(gameloop, 15);
 
 // Interval for movement
-setInterval(moveHoard, 500);
+setInterval(moveMonster, 700);
+
+//Monster Animation ////////
+setInterval(monsterAni, 700);
