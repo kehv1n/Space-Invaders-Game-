@@ -1,5 +1,51 @@
 html {
   width: 97%;
   height: 97%;
+}
 
+@font-face {
+/*///////SPACE INVADERS FONT////////*/
+font-family:"space invaders Regular";
+src:url("../lib/fonts/space_invaders.eot?") format("eot"),
+url("../lib/fonts/space_invaders.woff") format("woff"),
+url("../lib/fonts/space_invaders.ttf") format("truetype"),
+url("../lib/fonts/space_invaders.svg#Space-Invaders") format("svg");
+font-weight:normal;
+font-style:normal;
+}
+
+
+.winner {
+  position: absolute;
+  top: 250px;
+  left: 45%;
+  font-family: "space invaders Regular";
+  width: 180px;
+  height: 100px;
+  background-color: white;
+  margin: 0 auto;
+
+}
+
+.winner > h1 {
+  text-align: center;
+  color: #00ff00;
+  margin-top: 30px;
+}
+
+.loser {
+    position: absolute;
+    top: 250px;
+    left: 45%;
+    font-family: "space invaders Regular";
+    width: 220px;
+    height: 150px;
+    background-color: #616161;
+    margin: 0 auto;
+}
+
+.loser > h1 {
+  text-align: center;
+  color: #8f8f8f;
+  margin-top: 30px;
 }

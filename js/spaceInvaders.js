@@ -5,6 +5,8 @@ canvas.width = $(document).width(); // Sets width property of canvas the same as
 
 var ctx = canvas.getContext("2d"); // Sets Context to 2D
 
+////////// ALL IMGS NEEDED TO RENDER INCLUDING ANIMATIONS /////////////////////////////
+
 var backgroundImg = new Image(); // Initializing background img as a new Image
 backgroundImg.src = "lib/imgs/backgroundimg.png"; // Sets background img's source to img in files
 var backgroundReady = false; // initializes var background ready fals
@@ -19,7 +21,7 @@ var monster1Ready = false; // initializes var background ready false
 
 var monsterImg1a = new Image(); // Initializing background img as a new Image
 monsterImg1a.src = "lib/imgs/monster1-a.png"; // Sets background img's source to img in files
-var monster1aReady = false; // initializes var background ready false
+
 
 
 var monsterImg2 = new Image(); // Initializing background img as a new Image
@@ -28,7 +30,7 @@ var monster2Ready = false; // initializes var background ready false
 
 var monsterImg2a = new Image(); // Initializing background img as a new Image
 monsterImg2a.src = "lib/imgs/monster2-a.png"; // Sets background img's source to img in files
-var monster2aReady = false; // initializes var background ready false
+
 
 
 var monsterImg3 = new Image(); // Initializing background img as a new Image
@@ -38,49 +40,20 @@ var monster3Ready = false; // initializes var background ready false
 
 var monsterImg3a = new Image(); // Initializing background img as a new Image
 monsterImg3a.src = "lib/imgs/monster3-a.png"; // Sets background img's source to img in files
-var monster3aReady = false; // initializes var background ready false
+
 
 var spaceShotImg = new Image(); //Initialized space shot and gets it ready for loop
 spaceShotImg.src = "lib/imgs/spaceshot.png";
 var spaceShotReady = false;
 
-function Monster(x, y, points, img, wasHit) { //Monster constructor to create different monster
-    this.x = x;
-    this.y = y;
-    this.points = points;
-    this.image = img;
-    this.isDead = false;
-}
+var monsterDrop1 = new Image(); //Initialized space shot and gets it ready for loop
+monsterDrop1.src = "lib/imgs/monsterDrop1.png";
+var monsterDrop1Ready = false;
 
-var hoard1 = []; // Makes Multiple Monsters type: a (top
-for (i = 1; i <= 11; i++) {
-    hoard1[i] = new Monster(350 + i * 55, 100, 40, monsterImg1);
-}
+var monsterDrop1a = new Image(); //Initialized space shot and gets it ready for loop
+monsterDrop1a.src = "lib/imgs/monsterDrop1a.png";
 
-var hoard2 = []; // Makes Multiple Monsters type: b
-for (i = 1; i <= 11; i++) {
-    hoard2[i] = new Monster(355 + i * 55, 160, 20, monsterImg2);
-}
-
-var hoard3 = []; // Makes Multiple Monsters type: b
-for (i = 1; i <= 11; i++) {
-    hoard3[i] = new Monster(355 + i * 55, 210, 20, monsterImg2);
-}
-
-var hoard4 = []; // Makes Multiple Monsters type: c
-for (i = 1; i <= 11; i++) {
-    hoard4[i] = new Monster(350 + i * 55, 260, 20, monsterImg3);
-}
-
-var hoard5 = []; // Makes Multiple Monsters type: c
-for (i = 1; i <= 11; i++) {
-    hoard5[i] = new Monster(350 + i * 55, 310, 20, monsterImg3);
-}
-
-
-
-
-
+////////////////////// ONLOAD IMAGE VARIABLES ///////////////////
 backgroundImg.onload = function() {
     backgroundReady = true;
 }; // On load, turn these booleans true
@@ -119,6 +92,47 @@ spaceShotImg.onload = function() {
     spaceShotReady = true;
 };
 
+monsterDrop1.onload = function () {
+  monsterDrop1Ready = true;
+};
+
+
+
+
+function Monster(x, y, points, img, isDead) { //Monster constructor to create different monster
+    this.x = x;
+    this.y = y;
+    this.points = points;
+    this.image = img;
+    this.isDead = false;
+}
+
+var hoard1 = []; // Makes Multiple Monsters type: a (top
+for (i = 1; i <= 11; i++) {
+    hoard1[i] = new Monster(350 + i * 55, 100, 40, monsterImg1);
+}
+
+var hoard2 = []; // Makes Multiple Monsters type: b
+for (i = 1; i <= 11; i++) {
+    hoard2[i] = new Monster(355 + i * 55, 160, 20, monsterImg2);
+}
+
+var hoard3 = []; // Makes Multiple Monsters type: b
+for (i = 1; i <= 11; i++) {
+    hoard3[i] = new Monster(355 + i * 55, 210, 20, monsterImg2);
+}
+
+var hoard4 = []; // Makes Multiple Monsters type: c
+for (i = 1; i <= 11; i++) {
+    hoard4[i] = new Monster(350 + i * 55, 260, 20, monsterImg3);
+}
+
+var hoard5 = []; // Makes Multiple Monsters type: c
+for (i = 1; i <= 11; i++) {
+    hoard5[i] = new Monster(350 + i * 55, 310, 20, monsterImg3);
+}
+
+
 
 //Event Handler (SpaceShip Movment)
 var events = {}; // "Dictionary" that maps and adds events depending on the keypress
@@ -138,12 +152,14 @@ document.addEventListener("keydown", function(e) {
 
     if (e.keyCode === 32 || e.keyCode === 38 || e.keyCode === 87) {
         e.preventDefault();
+        ion.sound.play("shoot");
 
 
         var shot = {
             x: spaceship.x + 36,
             y: spaceship.y,
-            hitTarget: false
+            hitTarget: false,
+
         };
         spaceShots.push(shot);
     }
@@ -167,6 +183,7 @@ var spaceShots = [];
 
 
 function monsterAni() {
+
 
     hoard1.forEach(function(monster) { // monster type: b
         if (monster.image === monsterImg1) {
@@ -222,9 +239,9 @@ function monsterAni() {
 
 }
 
-
+// Check to see if there is any dead monsters
 var render = function() {
-  checkDeadDudes(); // Check to see if there is any dead des
+  checkDeadDudes();
     if (backgroundReady === true) {
 
         ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
@@ -246,8 +263,10 @@ var render = function() {
             if (monster.isDead === true ) {
 
 
+
             }
         });
+
     }
 
     //If all the monsters2 have loaded, draw them on the background;
@@ -257,6 +276,7 @@ var render = function() {
                 ctx.drawImage(monster.image, monster.x, monster.y, 40, 40);
             }
         });
+
     }
 
     //If all the monsters3 have loaded, draw them on the background;
@@ -284,11 +304,11 @@ var render = function() {
                 ctx.drawImage(monster.image, monster.x, monster.y, 40, 40);
             }
 
-            // if (monster.isDead === true ) {
-            //   monster.image.src = ;
-            // }
+
 
         });
+
+
     }
 
 
@@ -327,6 +347,24 @@ var render = function() {
 
         spaceShots = stillGoodShots;
     }
+    if (monsterDropArray.length > 0) {
+        var stillGoodDrops = [];
+
+        monsterDropArray.forEach(function(drop) {
+          if (drop.hitPlayer === false) {
+            ctx.drawImage(drop.image, drop.x, drop.y, 4, 16);
+            drop.y += 5;
+
+
+            if (drop.y < canvas.height) {
+                stillGoodDrops.push(drop);
+            }
+          }
+
+        });
+
+        monsterDropArray = stillGoodDrops;
+    }
 };
 
 //detection (wasHit?)
@@ -334,20 +372,64 @@ var render = function() {
 Monster.prototype.wasHit = function() {
 
     this.isDead = true;
+    ion.sound.play("invaderkilled");
+
 
 };
 
 var monsterArray = [hoard1, hoard2, hoard3, hoard4, hoard5];
 
 
+//MONSTER DROPS
+
+///////////////////////////MONSTERS & MONSTER DROPS  ///////////////////////////
+function dropAni() {
+  monsterDropArray.forEach(function(drop) {
+      if (drop.image === monsterDrop1) {
+          drop.image = monsterDrop1a;
+      }else{
+        drop.image = monsterDrop1;
+
+      }
+
+
+  });
+}
+
+var monsterDropArray = [];
+
+
+
+function randomDrop() {
+
+  if (monsterDrop1Ready === true) {
+    var randomNum = Math.floor(Math.random() * monsterArray.length);
+    var hoard = monsterArray[randomNum];
+    randomNum = Math.floor(Math.random() * hoard.length) ;
+    var monster = hoard[randomNum];
+
+    var drop = {
+      x: monster.x + 20 ,
+      y: monster.y,
+      hitPlayer: false,
+      image: monsterDrop1
+
+      };
+
+      monsterDropArray.push(drop);
+  }
+}
+
+/////////// Checks to see if the monsters are dead for collion purposes ////////
 function checkDeadDudes() {
   monsterArray.forEach(function(hoard) {
       hoard.forEach(function(monster) {
           spaceShots.forEach(function(shot) {
-              if (monster.isDead === false && (monster.x <= shot.x) && (shot.x <= (monster.x + 50)) && // Hit detection
+              if (monster.isDead === false && (monster.x <= shot.x) && (shot.x <= (monster.x + 50)) && //// Hit detection
               (monster.y <= shot.y) && (shot.y <= (monster.y + 10))) {
                   monster.wasHit();
                   shot.hitTarget = true;
+                  hasWin();
 
               }
 
@@ -358,13 +440,16 @@ function checkDeadDudes() {
   });
 }
 
-// MOVES ALL THE MONSTERS
+//////////////////////// MOVE MONSTERS //////////////////////////////////
+
 function moveRight () {
   monsterArray.forEach(function(hoard){
        hoard.forEach(function(monster){
        monster.x += 20;
        });
      });
+
+     ion.sound.play("fastinvader1");
 
 }
 
@@ -374,7 +459,7 @@ function moveLeft () {
        monster.x -= 20;
        });
      });
-
+      ion.sound.play("fastinvader1");
 }
 
 function moveDown () {
@@ -384,11 +469,11 @@ function moveDown () {
        var hasMovedDown = true;
        });
      });
+     ion.sound.play("fastinvader1");
 }
 
 var sideDirection = 'right';
 
-// Move Monster
 function moveMonster () {
   if (sideDirection === 'right' && monsterArray[1][10].x  < (canvas.width - 120)) {
     moveRight(); //If the edge of the final monster isn't touching the canvas edge
@@ -408,17 +493,84 @@ function moveMonster () {
 
   }
 }
-// Game Loop
+
+///////////// WIN LOSS //////////////////////
+
+
+function hasWin(){
+  var won = true;
+
+  monsterArray.forEach(function(hoard){
+    hoard.forEach(function(monster){
+       if (monster.isDead === false) {
+         won = false;
+       }
+    });
+  });
+    return won;
+}
+
+function hasLost() {
+  monsterArray.forEach(function(hoard){
+    hoard.forEach(function (monster) {
+      if ((monster.y) >= (canvas.height - 100)) {
+        loser();
+      }
+    });
+  });
+}
+
+function hasDied() {
+  if (spaceship.x && spaceship.y === drop.x && drop.y) {
+    loser();
+  }
+}
+
+
+
+
+
+
+
+/////////////////// GAME LOOPS //////////////////////////////////
 
 var gameloop = function() {
     render();
+    hasLost();
+    hasDied();
+
+    if (hasWin() === true ){
+        winner();
+    }
 };
 
+var myIntervalID = [];
+
 // Interval for the game loop
-setInterval(gameloop, 15);
+myIntervalID[0] = setInterval(gameloop, 15);
 
 // Interval for movement
-setInterval(moveMonster, 700);
+myIntervalID[1] = setInterval(moveMonster, 700);
 
 //Monster Animation ////////
-setInterval(monsterAni, 700);
+myIntervalID[2] = setInterval(monsterAni, 700);
+//Random Monster Drops //////
+myIntervalID[3] = setInterval(randomDrop, 1000);
+
+//Random Drop Animation //
+
+myIntervalID[4] = setInterval(dropAni, 100);
+
+//// SOUNDS ////////////////////////////////////////////////////////////////////////
+
+ion.sound({
+   sounds: [
+     {name: "fastinvader1"},
+     {name: "shoot"},
+     {name: "invaderkilled"},
+
+   ],
+   volume: 1.0,
+   path: "lib/ion.sound-3.0.7/sounds/",
+   preload: true
+ });
