@@ -155,7 +155,7 @@ document.addEventListener("keydown", function(e) {
         ion.sound.play("shoot");
 
 
-        var shot = {
+        shot = {
             x: spaceship.x + 36,
             y: spaceship.y,
             hitTarget: false,
@@ -415,7 +415,6 @@ function randomDrop() {
       image: monsterDrop1
 
       };
-
       monsterDropArray.push(drop);
   }
 }
@@ -513,15 +512,19 @@ function hasWin(){
 function hasLost() {
   monsterArray.forEach(function(hoard){
     hoard.forEach(function (monster) {
-      if ((monster.y) >= (canvas.height - 100)) {
+      if ((monster.y) >= (canvas.height - 170)) {
         loser();
       }
     });
   });
 }
 
+
+ //(monster.isDead === false && (monster.x <= shot.x) && (shot.x <= (monster.x + 50)) &&
+ // (monster.y <= shot.y) && (shot.y <= (monster.y + 10)))
 function hasDied() {
-  if (spaceship.x && spaceship.y === drop.x && drop.y) {
+  if ((spaceship.x <= drop.x) && (drop.x <= (spaceship.x + spaceship.img.width))&&
+   spaceship.y <= drop.y &&(drop.y <= (spaceship.y + spaceship.img.height))) {
     loser();
   }
 }
@@ -537,7 +540,7 @@ function hasDied() {
 var gameloop = function() {
     render();
     hasLost();
-    hasDied();
+    // hasDied();
 
     if (hasWin() === true ){
         winner();
