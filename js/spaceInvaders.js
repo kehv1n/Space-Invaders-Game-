@@ -109,27 +109,27 @@ function Monster(x, y, points, img, isDead) { //Monster constructor to create di
 
 var hoard1 = []; // Makes Multiple Monsters type: a (top
 for (i = 1; i <= 11; i++) {
-    hoard1[i] = new Monster(350 + i * 55, 100, 40, monsterImg1);
+    hoard1.push(new Monster(350 + i * 55, 100, 40, monsterImg1));
 }
 
 var hoard2 = []; // Makes Multiple Monsters type: b
 for (i = 1; i <= 11; i++) {
-    hoard2[i] = new Monster(355 + i * 55, 160, 20, monsterImg2);
+    hoard2.push(new Monster(355 + i * 55, 160, 20, monsterImg2));
 }
 
 var hoard3 = []; // Makes Multiple Monsters type: b
 for (i = 1; i <= 11; i++) {
-    hoard3[i] = new Monster(355 + i * 55, 210, 20, monsterImg2);
+    hoard3.push(new Monster(355 + i * 55, 210, 20, monsterImg2));
 }
 
 var hoard4 = []; // Makes Multiple Monsters type: c
 for (i = 1; i <= 11; i++) {
-    hoard4[i] = new Monster(350 + i * 55, 260, 20, monsterImg3);
+    hoard4.push(new Monster(350 + i * 55, 260, 20, monsterImg3));
 }
 
 var hoard5 = []; // Makes Multiple Monsters type: c
 for (i = 1; i <= 11; i++) {
-    hoard5[i] = new Monster(350 + i * 55, 310, 20, monsterImg3);
+    hoard5.push(new Monster(350 + i * 55, 310, 20, monsterImg3));
 }
 
 
@@ -156,8 +156,8 @@ document.addEventListener("keydown", function(e) {
 
 
         shot = {
-            x: spaceship.x + 36,
-            y: spaceship.y,
+            x: spaceship.x + 20,
+            y: spaceship.y - 20,
             hitTarget: false,
 
         };
@@ -177,9 +177,12 @@ document.addEventListener("keyup", function(e) {
 var spaceship = {
     x: 720,
     y: 550,
-    health: 100
+    health: 100,
+    width: 40,
+    height: 22
 };
 var spaceShots = [];
+var currentScore = 0;
 
 
 function monsterAni() {
@@ -249,7 +252,7 @@ var render = function() {
 
     }
     if (spaceShipReady === true) {
-        ctx.drawImage(spaceShipImg, spaceship.x, spaceship.y, 75, 75);
+        ctx.drawImage(spaceShipImg, spaceship.x, spaceship.y, spaceship.width, spaceship.height);
 
 
     }
@@ -429,6 +432,7 @@ function checkDeadDudes() {
                   monster.wasHit();
                   shot.hitTarget = true;
                   hasWin();
+                  score();
 
               }
 
@@ -492,6 +496,22 @@ function moveMonster () {
 
   }
 }
+/////////// SCORING MECHANISM ////////////////////////
+
+function score() {
+  var total = 0;
+  monsterArray.forEach(function (hoard) {
+    hoard.forEach(function(monster) {
+      if (monster.isDead === true) {
+        total += monster.points;
+      }
+    });
+  });
+  console.log(total);
+  currentScore = total;
+}
+
+
 
 ///////////// WIN LOSS //////////////////////
 
@@ -523,11 +543,13 @@ function hasLost() {
  //(monster.isDead === false && (monster.x <= shot.x) && (shot.x <= (monster.x + 50)) &&
  // (monster.y <= shot.y) && (shot.y <= (monster.y + 10)))
 function hasDied() {
-  if ((spaceship.x <= drop.x) && (drop.x <= (spaceship.x + spaceship.img.width))&&
-   spaceship.y <= drop.y &&(drop.y <= (spaceship.y + spaceship.img.height))) {
-    loser();
-  }
-}
+  monsterDropArray.forEach(function(drop){
+  if ((spaceship.x <= drop.x) && (drop.x <= (spaceship.x + spaceship.width))&&
+   (drop.y + 8 >= spaceship.y) && (drop.y <= spaceship.y + spaceship.height)) {
+     loser();
+      }
+        });
+    }
 
 
 
@@ -540,7 +562,7 @@ function hasDied() {
 var gameloop = function() {
     render();
     hasLost();
-    // hasDied();
+    hasDied();
 
     if (hasWin() === true ){
         winner();
