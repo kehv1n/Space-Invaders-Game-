@@ -31,5 +31,5 @@ $('.loser').show();
 }
 
 function updateScore () {
-  $('.scoreNumber').html(score());
+  $('.scoreNumber').html(totalScore);
 }

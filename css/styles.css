@@ -52,10 +52,12 @@ font-style:normal;
 
 .score {
   font-family: "space invaders Regular";
-  position: absolute;
-  font-size: 15px
-  left: 80px;
   color: gray;
+  position: absolute;
+  left: 20px;
+  font-size: 15px
+
+
 }
 
 .scoreNumber {

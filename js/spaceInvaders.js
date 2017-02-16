@@ -53,6 +53,10 @@ var monsterDrop1Ready = false;
 var monsterDrop1a = new Image(); //Initialized space shot and gets it ready for loop
 monsterDrop1a.src = "lib/imgs/monsterDrop1a.png";
 
+var barrier = new Image(); //Initialized space shot and gets it ready for loop
+barrier.src = "lib/imgs/monsterDrop1.png";
+var barrierReady = false;
+
 ////////////////////// ONLOAD IMAGE VARIABLES ///////////////////
 backgroundImg.onload = function() {
     backgroundReady = true;
@@ -92,8 +96,8 @@ spaceShotImg.onload = function() {
     spaceShotReady = true;
 };
 
-monsterDrop1.onload = function () {
-  monsterDrop1Ready = true;
+monsterDrop1.onload = function() {
+    monsterDrop1Ready = true;
 };
 
 
@@ -109,27 +113,27 @@ function Monster(x, y, points, img, isDead) { //Monster constructor to create di
 
 var hoard1 = []; // Makes Multiple Monsters type: a (top
 for (i = 1; i <= 11; i++) {
-    hoard1.push(new Monster(350 + i * 55, 100, 40, monsterImg1));
+    hoard1.push(new Monster(350 + i * 55, 50, 20, monsterImg1));
 }
 
 var hoard2 = []; // Makes Multiple Monsters type: b
 for (i = 1; i <= 11; i++) {
-    hoard2.push(new Monster(355 + i * 55, 160, 20, monsterImg2));
+    hoard2.push(new Monster(355 + i * 55, 110, 20, monsterImg2));
 }
 
 var hoard3 = []; // Makes Multiple Monsters type: b
 for (i = 1; i <= 11; i++) {
-    hoard3.push(new Monster(355 + i * 55, 210, 20, monsterImg2));
+    hoard3.push(new Monster(355 + i * 55, 160, 20, monsterImg2));
 }
 
 var hoard4 = []; // Makes Multiple Monsters type: c
 for (i = 1; i <= 11; i++) {
-    hoard4.push(new Monster(350 + i * 55, 260, 20, monsterImg3));
+    hoard4.push(new Monster(350 + i * 55, 210, 20, monsterImg3));
 }
 
 var hoard5 = []; // Makes Multiple Monsters type: c
 for (i = 1; i <= 11; i++) {
-    hoard5.push(new Monster(350 + i * 55, 310, 20, monsterImg3));
+    hoard5.push(new Monster(350 + i * 55, 260, 20, monsterImg3));
 }
 
 
@@ -244,7 +248,7 @@ function monsterAni() {
 
 // Check to see if there is any dead monsters
 var render = function() {
-  checkDeadDudes();
+    hitDetection();
     if (backgroundReady === true) {
 
         ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
@@ -263,7 +267,7 @@ var render = function() {
             if (monster.isDead === false) {
                 ctx.drawImage(monster.image, monster.x, monster.y, 40, 40);
             }
-            if (monster.isDead === true ) {
+            if (monster.isDead === true) {
 
 
 
@@ -319,7 +323,7 @@ var render = function() {
         spaceship.x = spaceship.x - 5;
     }
 
-    if (39 in events || 68 in events ) { // Right Arrow Key Movement
+    if (39 in events || 68 in events) { // Right Arrow Key Movement
         spaceship.x = spaceship.x + 5;
     }
 
@@ -336,14 +340,14 @@ var render = function() {
         var stillGoodShots = [];
 
         spaceShots.forEach(function(shot) {
-          if (shot.hitTarget === false) {
-            ctx.drawImage(spaceShotImg, shot.x, shot.y, 2, 8);
-            shot.y -= 15;
+            if (shot.hitTarget === false) {
+                ctx.drawImage(spaceShotImg, shot.x, shot.y, 2, 8);
+                shot.y -= 15;
 
-            if (shot.y > 0) {
-                stillGoodShots.push(shot);
+                if (shot.y > 0) {
+                    stillGoodShots.push(shot);
+                }
             }
-          }
 
         });
 
@@ -354,15 +358,15 @@ var render = function() {
         var stillGoodDrops = [];
 
         monsterDropArray.forEach(function(drop) {
-          if (drop.hitPlayer === false) {
-            ctx.drawImage(drop.image, drop.x, drop.y, 4, 16);
-            drop.y += 5;
+            if (drop.hitPlayer === false) {
+                ctx.drawImage(drop.image, drop.x, drop.y, 4, 16);
+                drop.y += 5;
 
 
-            if (drop.y < canvas.height) {
-                stillGoodDrops.push(drop);
+                if (drop.y < canvas.height) {
+                    stillGoodDrops.push(drop);
+                }
             }
-          }
 
         });
 
@@ -387,16 +391,16 @@ var monsterArray = [hoard1, hoard2, hoard3, hoard4, hoard5];
 
 ///////////////////////////MONSTERS & MONSTER DROPS  ///////////////////////////
 function dropAni() {
-  monsterDropArray.forEach(function(drop) {
-      if (drop.image === monsterDrop1) {
-          drop.image = monsterDrop1a;
-      }else{
-        drop.image = monsterDrop1;
+    monsterDropArray.forEach(function(drop) {
+        if (drop.image === monsterDrop1) {
+            drop.image = monsterDrop1a;
+        } else {
+            drop.image = monsterDrop1;
 
-      }
+        }
 
 
-  });
+    });
 }
 
 var monsterDropArray = [];
@@ -405,110 +409,155 @@ var monsterDropArray = [];
 
 function randomDrop() {
 
-  if (monsterDrop1Ready === true) {
-    var randomNum = Math.floor(Math.random() * monsterArray.length);
-    var hoard = monsterArray[randomNum];
-    randomNum = Math.floor(Math.random() * hoard.length) ;
-    var monster = hoard[randomNum];
+    if (monsterDrop1Ready === true) {
+        var randomNum = Math.floor(Math.random() * monsterArray.length);
+        var hoard = monsterArray[randomNum];
+        randomNum = Math.floor(Math.random() * hoard.length);
+        var monster = hoard[randomNum];
 
-    var drop = {
-      x: monster.x + 20 ,
-      y: monster.y,
-      hitPlayer: false,
-      image: monsterDrop1
+        var drop = {
+            x: monster.x + 20,
+            y: monster.y,
+            hitPlayer: false,
+            image: monsterDrop1
 
-      };
-      monsterDropArray.push(drop);
-  }
+        };
+        monsterDropArray.push(drop);
+    }
 }
 
 /////////// Checks to see if the monsters are dead for collion purposes ////////
-function checkDeadDudes() {
-  monsterArray.forEach(function(hoard) {
-      hoard.forEach(function(monster) {
-          spaceShots.forEach(function(shot) {
-              if (monster.isDead === false && (monster.x <= shot.x) && (shot.x <= (monster.x + 50)) && //// Hit detection
-              (monster.y <= shot.y) && (shot.y <= (monster.y + 10))) {
-                  monster.wasHit();
-                  shot.hitTarget = true;
-                  hasWin();
-                  score();
+function hitDetection() {
+    monsterArray.forEach(function(hoard) {
+        hoard.forEach(function(monster) {
+            spaceShots.forEach(function(shot) {
+                if (monster.isDead === false && (monster.x <= shot.x) && (shot.x <= (monster.x + 50)) && //// Hit detection
+                    (monster.y <= shot.y) && (shot.y <= (monster.y + 10))) {
+                    monster.wasHit();
+                    shot.hitTarget = true;
+                    hasWin();
+                    score();
+                    moveFaster();
 
-              }
+                }
 
-          });
-      });
+            });
+        });
 
 
-  });
+    });
 }
 
 //////////////////////// MOVE MONSTERS //////////////////////////////////
 
-function moveRight () {
-  monsterArray.forEach(function(hoard){
-       hoard.forEach(function(monster){
-       monster.x += 20;
-       });
-     });
+function moveRight() {
+    monsterArray.forEach(function(hoard) {
+        hoard.forEach(function(monster) {
+            monster.x += 20;
+        });
+    });
 
-     ion.sound.play("fastinvader1");
+    ion.sound.play("fastinvader1");
 
 }
 
-function moveLeft () {
-  monsterArray.forEach(function(hoard){
-       hoard.forEach(function(monster){
-       monster.x -= 20;
-       });
-     });
-      ion.sound.play("fastinvader1");
+function moveLeft() {
+    monsterArray.forEach(function(hoard) {
+        hoard.forEach(function(monster) {
+            monster.x -= 20;
+        });
+    });
+    ion.sound.play("fastinvader1");
 }
 
-function moveDown () {
-  monsterArray.forEach(function(hoard){
-       hoard.forEach(function(monster){
-       monster.y += 20;
-       var hasMovedDown = true;
-       });
-     });
-     ion.sound.play("fastinvader1");
+function moveDown() {
+    monsterArray.forEach(function(hoard) {
+        hoard.forEach(function(monster) {
+            monster.y += 20;
+            var hasMovedDown = true;
+        });
+    });
+    ion.sound.play("fastinvader1");
 }
 
 var sideDirection = 'right';
 
-function moveMonster () {
-  if (sideDirection === 'right' && monsterArray[1][10].x  < (canvas.width - 120)) {
-    moveRight(); //If the edge of the final monster isn't touching the canvas edge
-  }
-  if (sideDirection === 'right' && monsterArray[1][10].x  >= (canvas.width - 120 )) {
-    sideDirection = 'left';
-    moveDown(); //If the edge of the final monster touches the canvas length
-  }
+function moveMonster() {
+    if (sideDirection === 'right' && monsterArray[1][10].x < (canvas.width - 120)) {
+        moveRight(); //If the edge of the final monster isn't touching the canvas edge
+    }
+    if (sideDirection === 'right' && monsterArray[1][10].x >= (canvas.width - 120)) {
+        sideDirection = 'left';
+        moveDown(); //If the edge of the final monster touches the canvas length
+    }
 
-  if (sideDirection === 'left' && monsterArray[1][1].x >= 30) {
-    moveLeft(); //If the left edge of the 1st monster isnt touching canvas length
-  }
+    if (sideDirection === 'left' && monsterArray[1][1].x >= 30) {
+        moveLeft(); //If the left edge of the 1st monster isnt touching canvas length
+    }
 
-  if (sideDirection === 'left' && monsterArray[1][1].x <= 30 ){
-    sideDirection = 'right'; //If the left edge touces the canvas right length
-    moveDown();
+    if (sideDirection === 'left' && monsterArray[1][1].x <= 30) {
+        sideDirection = 'right'; //If the left edge touces the canvas right length
+        moveDown();
 
-  }
+    }
+}
+
+
+function deadMonstersCount() {
+  var deadCount = 0;
+    monsterArray.forEach(function(hoard) {
+        hoard.forEach(function(monster) {
+            if (monster.isDead === true) {
+                deadCount = deadCount + 1;
+
+            }
+        });
+
+    });
+    return deadCount;
+}
+
+function moveFaster() {
+    if (deadMonstersCount() > 20) {
+        console.log('fired');
+        clearInterval(myIntervalID[1]);
+        myIntervalID[1] = setInterval(moveMonster, 500);
+        clearInterval(myIntervalID[2]);
+        myIntervalID[2] = setInterval(monsterAni, 500);
+    }
+    else if (deadMonstersCount() > 15) {
+      console.log('fired2');
+      clearInterval(myIntervalID[1]);
+      myIntervalID[1] = setInterval(moveMonster, 550);
+      clearInterval(myIntervalID[2]);
+      myIntervalID[2] = setInterval(monsterAni,  550);
+    }
+    else if (deadMonstersCount() > 10) {
+      console.log('fired2');
+      clearInterval(myIntervalID[1]);
+      myIntervalID[1] = setInterval(moveMonster, 600);
+      clearInterval(myIntervalID[2]);
+      myIntervalID[2] = setInterval(monsterAni,  600);
+    }
+    else if (deadMonstersCount() > 5) {
+      console.log('fired2');
+      clearInterval(myIntervalID[1]);
+      myIntervalID[1] = setInterval(moveMonster, 650);
+      clearInterval(myIntervalID[2]);
+      myIntervalID[2] = setInterval(monsterAni,  650);
+    }
 }
 /////////// SCORING MECHANISM ////////////////////////
-
+var totalScore = 0;
 function score() {
-  var total = 0;
-  monsterArray.forEach(function (hoard) {
-    hoard.forEach(function(monster) {
-      if (monster.isDead === true) {
-        total += monster.points;
-      }
+    monsterArray.forEach(function(hoard) {
+        hoard.forEach(function(monster) {
+            if (monster.isDead === true) {
+                totalScore += monster.points;
+            }
+        });
     });
-  });
-  currentScore = total;
-  return total;
+    currentScore = totalScore;
 }
 
 
@@ -516,40 +565,40 @@ function score() {
 ///////////// WIN LOSS //////////////////////
 
 
-function hasWin(){
-  var won = true;
+function hasWin() {
+    var won = true;
 
-  monsterArray.forEach(function(hoard){
-    hoard.forEach(function(monster){
-       if (monster.isDead === false) {
-         won = false;
-       }
+    monsterArray.forEach(function(hoard) {
+        hoard.forEach(function(monster) {
+            if (monster.isDead === false) {
+                won = false;
+            }
+        });
     });
-  });
     return won;
 }
 
 function hasLost() {
-  monsterArray.forEach(function(hoard){
-    hoard.forEach(function (monster) {
-      if ((monster.y) >= (canvas.height - 170)) {
-        loser();
-      }
+    monsterArray.forEach(function(hoard) {
+        hoard.forEach(function(monster) {
+            if ((monster.y) >= (canvas.height - 170)) {
+                loser();
+            }
+        });
     });
-  });
 }
 
 
- //(monster.isDead === false && (monster.x <= shot.x) && (shot.x <= (monster.x + 50)) &&
- // (monster.y <= shot.y) && (shot.y <= (monster.y + 10)))
+//(monster.isDead === false && (monster.x <= shot.x) && (shot.x <= (monster.x + 50)) &&
+// (monster.y <= shot.y) && (shot.y <= (monster.y + 10)))
 function hasDied() {
-  monsterDropArray.forEach(function(drop){
-  if ((spaceship.x <= drop.x) && (drop.x <= (spaceship.x + spaceship.width))&&
-   (drop.y + 8 >= spaceship.y) && (drop.y <= spaceship.y + spaceship.height)) {
-     loser();
-      }
-        });
-    }
+    monsterDropArray.forEach(function(drop) {
+        if ((spaceship.x <= drop.x) && (drop.x <= (spaceship.x + spaceship.width)) &&
+            (drop.y + 8 >= spaceship.y) && (drop.y <= spaceship.y + spaceship.height)) {
+            loser();
+        }
+    });
+}
 
 
 
@@ -564,8 +613,10 @@ var gameloop = function() {
     hasLost();
     hasDied();
     updateScore();
+    deadMonstersCount();
 
-    if (hasWin() === true ){
+
+    if (hasWin() === true) {
         winner();
     }
 };
@@ -573,30 +624,35 @@ var gameloop = function() {
 var myIntervalID = [];
 
 // Interval for the game loop
-myIntervalID[0] = setInterval(gameloop, 15);
+myIntervalID[0] = setInterval(gameloop, 15); // Return 1
 
 // Interval for movement
-myIntervalID[1] = setInterval(moveMonster, 700);
+myIntervalID[1] = setInterval(moveMonster, 700); // Return 2
 
 //Monster Animation ////////
-myIntervalID[2] = setInterval(monsterAni, 700);
+myIntervalID[2] = setInterval(monsterAni, 700); // Return 3
 //Random Monster Drops //////
-myIntervalID[3] = setInterval(randomDrop, 1000);
+myIntervalID[3] = setInterval(randomDrop, 1000); // Return 4
 
 //Random Drop Animation //
 
-myIntervalID[4] = setInterval(dropAni, 100);
+myIntervalID[4] = setInterval(dropAni, 100); // Return 5
 
 //// SOUNDS ////////////////////////////////////////////////////////////////////////
 
 ion.sound({
-   sounds: [
-     {name: "fastinvader1"},
-     {name: "shoot"},
-     {name: "invaderkilled"},
+    sounds: [{
+            name: "fastinvader1"
+        },
+        {
+            name: "shoot"
+        },
+        {
+            name: "invaderkilled"
+        },
 
-   ],
-   volume: 1.0,
-   path: "lib/ion.sound-3.0.7/sounds/",
-   preload: true
- });
+    ],
+    volume: 1.0,
+    path: "lib/ion.sound-3.0.7/sounds/",
+    preload: true
+});
