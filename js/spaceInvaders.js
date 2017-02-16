@@ -507,8 +507,8 @@ function score() {
       }
     });
   });
-  console.log(total);
   currentScore = total;
+  return total;
 }
 
 
@@ -563,6 +563,7 @@ var gameloop = function() {
     render();
     hasLost();
     hasDied();
+    updateScore();
 
     if (hasWin() === true ){
         winner();

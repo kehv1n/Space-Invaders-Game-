@@ -29,3 +29,7 @@ $('.loser').show();
 
 
 }
+
+function updateScore () {
+  $('.scoreNumber').html(score());
+}

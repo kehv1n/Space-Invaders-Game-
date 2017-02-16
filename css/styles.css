@@ -49,3 +49,18 @@ font-style:normal;
   color: firebrick;
   margin-top: 30px;
 }
+
+.score {
+  font-family: "space invaders Regular";
+  position: absolute;
+  font-size: 15px
+  left: 80px;
+  color: gray;
+}
+
+.scoreNumber {
+  color: green;
+  position: absolute;
+  bottom: 0px;
+  left: 70px;
+}
