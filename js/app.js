@@ -1,9 +1,10 @@
 
-///////////////// WIN LOSE //////////////////////////////////
+///////////////// START SCREEN AND BASIC GAME FUNCTIONS /////////////////
 
 $(document).ready(function (){
 $('.winner').hide();
 $('.loser').hide();
+$('.gameDiv').hide();
 
 
 });
