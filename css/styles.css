@@ -1,4 +1,7 @@
 
+body {
+  background-color: black;
+}
 
 /* ==============================================================================================
 Nick Mkrtchyan
@@ -68,7 +71,7 @@ header a, a:visited {
     to {background-position:10000px 0;}
 }
 
-.stars, .clouds {
+.stars, .twinkling, .clouds {
   position:absolute;
   top:0;
   left:0;
@@ -84,11 +87,20 @@ header a, a:visited {
   z-index:0;
 }
 
+.twinkling{
+  background:transparent url(http://www.script-tutorials.com/demos/360/images/twinkling.png) repeat top center;
+  z-index:0;
 
+  -moz-animation:move-twink-back 200s linear infinite;
+  -ms-animation:move-twink-back 200s linear infinite;
+  -o-animation:move-twink-back 200s linear infinite;
+  -webkit-animation:move-twink-back 200s linear infinite;
+  animation:move-twink-back 200s linear infinite;
+}
 
 .clouds{
     background:transparent url(http://www.script-tutorials.com/demos/360/images/clouds3.png) repeat top center;
-    z-index:3;
+    z-index:0;
 
   -moz-animation:move-clouds-back 200s linear infinite;
   -ms-animation:move-clouds-back 200s linear infinite;
@@ -190,18 +202,7 @@ height: 100%;
 
 }
 
-.mainBox > button {
-  margin-top: 30px;
-  width: 500px;
-  height: 50px;
-  background-color: #eb0046;
-  border-radius: 30px;
-  border: none;
-  font-size: 20px;
-  font-family: arial;
-  color: white;
 
-}
 
 .controls {
 margin: 0 auto;
@@ -219,44 +220,81 @@ font-size: 20px;
   height: 40px;
   display: inline-block;
   margin-top: 10px;
+  border: 1px solid white;
 }
 
 .space {
   border-radius: 15px;
   width: 150px;
-  border: 5px solid white;
   margin-right: 15px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
 }
 
 
 .left {
   border-radius: 15px;
   width: 80px;
-  border: 5px solid white;
   margin-right: 15px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
 }
 
 
 .right {
   border-radius: 15px;
   width: 80px;
-  border: 5px solid white;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
 }
 
 .press {
   margin-top: 10px;
 }
 
-.grow {
-	display: inline-block;
-	transition-duration: $defaultDuration;
-	transition-property: transform;
+.spaceButton {
+  margin-top: 30px;
+  width: 500px;
+  height: 50px;
+  background-color: #eb0046;
+  border-radius: 30px;
+  border: 5px solid white;
+  font-size: 20px;
+  font-family: arial;
+  color: white;
+  z-index: 1;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
 
-	@include hideTapHighlightColor();
-	@include hardwareAccel();
-	@include improveAntiAlias();
+.spaceButton:hover {
+  background-color: #da0343;
+}
 
-	&:hover {
-		transform: scale(1.1);
-	}
+.space:hover {
+  background-color: #eb0046;
+}
+.left:hover {
+  background-color: #eb0046;
+}
+.right:hover {
+  background-color: #eb0046;
+}
+
+
+.btn-5 {
+  border: 0 solid;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0);
+  outline-color: rgba(255, 255, 255, .5);
+  outline-offset: 0px;
+  text-shadow: none;
+  transition: all 1250ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.btn-5:hover {
+  border: 1px solid;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+  outline-color: rgba(255, 255, 255, 0);
+  outline-offset: 15px;
+  text-shadow: 1px 1px 2px #427388;
 }
