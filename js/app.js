@@ -6,6 +6,9 @@ $('.winner').hide();
 $('.loser').hide();
 $('.gameDiv').hide();
 startClick();
+
+ion.sound.play("theme");
+
 // SPACE BAR SHOOT SOUND ////////
 $('.press').first().click(function(){
   ion.sound.play("shoot");
@@ -31,6 +34,7 @@ myIntervalID.forEach(function(element){
   clearInterval(element);
   });
 $('.winner').show();
+ion.sound.play("win");
 
 
 }
@@ -41,6 +45,7 @@ myIntervalID.forEach(function(element){
   clearInterval(element);
   });
 $('.loser').show();
+ion.sound.play("lose");
 
 
 }
@@ -55,6 +60,25 @@ function startClick () {
   $('.spaceButton').click(function (){
     $('.startScreen').fadeOut();
     $('.gameDiv').fadeIn();
+    ion.sound.stop();
+    ion.sound.play("button");
+
+
+    myIntervalID[0] = setInterval(gameloop, 15); // Return 1
+
+    // Interval for movement
+    myIntervalID[1] = setInterval(moveMonster, 700); // Return 2
+
+    //Monster Animation ////////
+    myIntervalID[2] = setInterval(monsterAni, 700); // Return 3
+    //Random Monster Drops //////
+    myIntervalID[3] = setInterval(randomDrop, 1000); // Return 4
+
+    //Random Drop Animation //
+
+    myIntervalID[4] = setInterval(dropAni, 100); // Return 5
+
+
   });
 }
 

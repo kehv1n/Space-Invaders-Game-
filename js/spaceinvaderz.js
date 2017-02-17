@@ -517,30 +517,32 @@ function deadMonstersCount() {
     return deadCount;
 }
 
+var currentInterval = null;
+
 function moveFaster() {
-    if (deadMonstersCount() > 20) {
-        console.log('fired');
+    if (deadMonstersCount() > 20 && currentInterval > 500) {
+        currentInterval = 500;
         clearInterval(myIntervalID[1]);
         myIntervalID[1] = setInterval(moveMonster, 500);
         clearInterval(myIntervalID[2]);
         myIntervalID[2] = setInterval(monsterAni, 500);
     }
-    else if (deadMonstersCount() > 15) {
-      console.log('fired2');
+    else if (deadMonstersCount() > 15 && currentInterval > 550) {
+      currentInterval = 550;
       clearInterval(myIntervalID[1]);
       myIntervalID[1] = setInterval(moveMonster, 550);
       clearInterval(myIntervalID[2]);
       myIntervalID[2] = setInterval(monsterAni,  550);
     }
-    else if (deadMonstersCount() > 10) {
-      console.log('fired2');
+    else if (deadMonstersCount() > 10 && currentInterval > 600) {
+      currentInterval = 600;
       clearInterval(myIntervalID[1]);
       myIntervalID[1] = setInterval(moveMonster, 600);
       clearInterval(myIntervalID[2]);
       myIntervalID[2] = setInterval(monsterAni,  600);
     }
-    else if (deadMonstersCount() > 5) {
-      console.log('fired2');
+    else if (deadMonstersCount() > 5 && currentInterval === null) {
+      currentInterval = 650;
       clearInterval(myIntervalID[1]);
       myIntervalID[1] = setInterval(moveMonster, 650);
       clearInterval(myIntervalID[2]);
@@ -589,8 +591,6 @@ function hasLost() {
 }
 
 
-//(monster.isDead === false && (monster.x <= shot.x) && (shot.x <= (monster.x + 50)) &&
-// (monster.y <= shot.y) && (shot.y <= (monster.y + 10)))
 function hasDied() {
     monsterDropArray.forEach(function(drop) {
         if ((spaceship.x <= drop.x) && (drop.x <= (spaceship.x + spaceship.width)) &&
@@ -606,7 +606,7 @@ function hasDied() {
 
 
 
-/////////////////// GAME LOOPS //////////////////////////////////
+/////////////////// GAME LOOP //////////////////////////////////
 
 var gameloop = function() {
     render();
@@ -623,21 +623,6 @@ var gameloop = function() {
 
 var myIntervalID = [];
 
-// Interval for the game loop
-myIntervalID[0] = setInterval(gameloop, 15); // Return 1
-
-// Interval for movement
-myIntervalID[1] = setInterval(moveMonster, 700); // Return 2
-
-//Monster Animation ////////
-myIntervalID[2] = setInterval(monsterAni, 700); // Return 3
-//Random Monster Drops //////
-myIntervalID[3] = setInterval(randomDrop, 1000); // Return 4
-
-//Random Drop Animation //
-
-myIntervalID[4] = setInterval(dropAni, 100); // Return 5
-
 //// SOUNDS ////////////////////////////////////////////////////////////////////////
 
 ion.sound({
@@ -650,6 +635,20 @@ ion.sound({
         {
             name: "invaderkilled"
         },
+        {
+            name: "theme"
+        },
+        {
+            name: "lose"
+        },
+        {
+            name: "win"
+        },
+        {
+            name: "button"
+        }
+
+
 
     ],
     volume: 1.0,
