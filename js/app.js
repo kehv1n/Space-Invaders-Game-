@@ -5,9 +5,9 @@ $(document).ready(function (){
 $('.winner').hide();
 $('.loser').hide();
 $('.gameDiv').hide();
-startClick();
-
 ion.sound.play("theme");
+setTimeout(startClick, 2000);
+
 
 // SPACE BAR SHOOT SOUND ////////
 $('.press').first().click(function(){
@@ -22,6 +22,7 @@ $('.2b').click(function(){
 $('.3b').click(function(){
   ion.sound.play("fastinvader1");
 });
+
 
 }); // END OF DOC READY
 
@@ -54,9 +55,15 @@ ion.sound.play("lose");
 function updateScore () {
   $('.scoreNumber').html(totalScore);
 }
+function notDisabled() {
+  $('.spaceButton').attr('disabled', false);
+  $('.spaceButton').text('START');
+  $('.spaceButton').addClass('spaceButtonOn');
+}
 
 /// STARTS GAME IF USER CLICKS BUTTON ////////////
 function startClick () {
+  notDisabled();
   $('.spaceButton').click(function (){
     $('.startScreen').fadeOut();
     $('.gameDiv').fadeIn();
